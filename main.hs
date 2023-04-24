@@ -1,15 +1,11 @@
 module Main where
 
-opcao :: Int -> Int
-opcao x 
-    |x==1 = 
-    |x==2 =
-    |x==3 =
-    |x==0 =
-    |otherwise = putStrLn "Opção Invalida"
+import Func (opcao)
+
 
 main :: IO()
-main x = 
-    putStrLn "1-> \n 2-> \n 3-> \n 0-> \n"
+main = do
+    putStrLn ("1->Ver UC \n2->Ver Alunos \n3->Filtrar por UC/Alunos\n 0->Sair \nQual a opção?:")
     a <- getLine
     opcao a
+
