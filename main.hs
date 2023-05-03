@@ -27,45 +27,62 @@ import System.IO
 
 
 
-opcao :: Int -> IO()
-opcao x 
-    | x == 1 = veruc
-    | x == 2 = veralu
-    | x == 3 = escaluc
-    | x == 0 = do
-        putStrLn ("Até à próxima :)")
-        return 0
-    |otherwise = putStrLn ("ERROR: INVALID OPTION")
+main :: IO ()
+main = do
+    putStrLn "Escolha uma opção: \1 - Lista de alunos \2 - Cadeiras \3 - Inscrições\0 - Sair"
+    opcao <- getLine
+    lancaopcao opcao 
 
-buscadados :: IO ()
-buscadados = do
--- MOSTRA FICHEIRO DA LISTA DE ALUNOS
+lancaopcao :: Int -> IO()
+lancaopcao opcao 
+    | opcao == 1 = do
+        filelistaalunos
+        main
+    | opcao == 2 = do 
+       filecadeiras
+        main
+    | opcao == 3 = do
+       fileinscricoes
+        main
+    | opcao == 0 = do
+        putStrLn ("Até à próxima :)")
+        return ()
+    |otherwise = do
+        putStrLn ("ERROR: INVALID OPTION")
+        main
+
+filelistaalunos :: IO ()
+filelistaalunos = do
   putStrLn ("\n ***LISTA DE ALUNOS***\n")
   fic1 <- openFile "listaalunos.txt" ReadMode
   contents <- hGetContents fic1
   putStrLn contents
   hClose fic1
-  -- MOSTRA FICHEIRO DAS CADEIRAS   
+ 
+ filecadeiras :: IO ()
+ filecadeiras = do  
   putStrLn ("\n ***CADEIRAS***\n")
   fic2 <- openFile "ucs.txt" ReadMode
   contents <- hGetContents fic2
   putStrLn contents
   hClose fic2
-  -- MOSTRA FICHEIRO DAS INSCRIÇÕES
+
+  fileinscricoes :: IO ()
+  fileinscricoes = do
   putStrLn ("\n ***INCRIÇÕES***\n")
   fic3 <- openFile "inscrições.txt" ReadMode
   contents <- hGetContents fic3
   putStrLn contents
   hClose fic3
-  putStrLn ("\n*****************************************")
+  
 
 
 
-main :: IO()
-main = do
-    buscadados
-    putStrLn ("******************MENU*******************\n*****************************************")
-    putStrLn ("\n1->Ver UC \n2->Ver Alunos \n3->Filtrar por UC/Alunos\n0->Sair \n    Qual a opção?:")
+--main :: IO()
+--main = do
+    --buscadados
+    --putStrLn ("******************MENU*******************\n*****************************************")
+    --putStrLn ("\n1->Ver UC \n2->Ver Alunos \n3->Filtrar por UC/Alunos\n0->Sair \n    Qual a opção?:")
    -- a <- getLine
    -- opcao a
 
