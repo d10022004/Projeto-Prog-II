@@ -27,15 +27,15 @@ import System.IO
 
 
 
---opcao :: Int -> IO()
---opcao x 
-  --  | x == 1 = veruc
-  --  | x == 2 = veralu
-  --  | x == 3 = escaluc
-  --  | x == 0 = do
-   --     putStrLn ("Até à próxima :)")
-     --   return 0
-  --  |otherwise = putStrLn ("ERROR: INVALID OPTION")
+opcao :: Int -> IO()
+opcao x 
+    | x == 1 = veruc
+    | x == 2 = veralu
+    | x == 3 = escaluc
+    | x == 0 = do
+        putStrLn ("Até à próxima :)")
+        return 0
+    |otherwise = putStrLn ("ERROR: INVALID OPTION")
 
 buscadados :: IO ()
 buscadados = do
