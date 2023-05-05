@@ -77,14 +77,20 @@ apreins = do
 
 ------------------------------------------------------------------------------
 
-recetfic :: IO()
-recetfic = do
+comparuni :: [(Int, Int, String)] -> [(String, Int)] -> [(String, Int, String)] -> IO()
+comparuni [(a,b,c)] [(a2, b2)] [(a3,b3,c3)] = do
+    |
+    
+
+recetfic :: Int -> IO()
+recetfic x = do
     cadeiras <- apreuc
-    print cadeiras
     inscricoes <- apreins
-    print inscricoes
     alunos <- apreal
-    print alunos
-    return ()
+recetfic x    
+    |x==1 = do
+        comparuni cadeiras inscricoes alunos
+
+
 
 
