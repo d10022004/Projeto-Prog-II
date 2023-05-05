@@ -1,16 +1,32 @@
 module Funcchamar where
 import System.IO 
-import Distribution.PackageDescription (versionToPkgconfigVersion)
+
 
 chamaselecop ::  Int -> IO()
 chamaselecop x 
-    |x==1 = putStrLn "Qual o nome da cadeira?"
-            uc <- getLine
-    |x==2 = putStrLn "Qual o numero do aluno?(alxxx)"
-            al <- getLine
+    |x==1 = do
+        putStrLn "Qual o nome da cadeira?"
+        uc <- getLine
+        uclist <- apreuc
+        putStrLn "Pressione Enter para continuar..."
+        hFlush stdout
+        getLine
+        main
+    |x==2 = do
+        putStrLn "Qual o numero do aluno?(alxxx)"
+        al <- getLine
+        alunos <- apreal
+        putStrLn "Pressione Enter para continuar..."
+        hFlush stdout
+        getLine
+        main
     |x==0 = main
-    |otherwise = putStrLn "INCORRECT OPTION"
-                 main
+    |otherwise = do 
+        putStrLn "OPCAO INVALIDA"
+        putStrLn "Pressione Enter para continuar..."
+        hFlush stdout
+        getLine
+        main
 
 chamaselec :: IO()
 chamaselec = do
