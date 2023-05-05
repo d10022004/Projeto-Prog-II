@@ -51,7 +51,6 @@ apreal = do
     let list = lines texto 
         alunos = toalunos list
     return alunos
-
 ---------------------------------------------------------------------------------
 -- Função que recebe uma string e retorna uma lista de truplas
 toinscri :: [String] -> [(String, Int)]
@@ -76,20 +75,36 @@ apreins = do
     return inscricao
 
 ------------------------------------------------------------------------------
+verialuc :: [(String, Int)] -> [(String, Int, String)] -> [(Int, String, String)]
+verialuc [] _ = []
+verialuc ((nome, numero):xs) ys = 
+    let matches = [(i, n, s) | (n, i, s) <- ys, i == numero]
+        restante = verialuc xs ys
+    in [(i, nome, s) | (i, _, s) <- matches] ++ restante
 
-comparuni :: [(Int, Int, String)] -> [(String, Int)] -> [(String, Int, String)] -> IO()
-comparuni [(a,b,c)] [(a2, b2)] [(a3,b3,c3)] = do
-    |
-    
+combinalista :: [(String, Int)] -> [(String, Int)] -> [(String, Int, String)] -> [(Int, String, String)]
+combinalista lst1 lst2 lst3 = 
+    let matches = [(nome, numero) | (nome, numero) <- lst2, elem nome (map fst lst1)]
+    in verialuc matches lst3
 
-recetfic :: Int -> IO()
-recetfic x = do
+
+
+
+
+recetfic :: IO ()
+recetfic = do
     cadeiras <- apreuc
     inscricoes <- apreins
     alunos <- apreal
-recetfic x    
-    |x==1 = do
-        comparuni cadeiras inscricoes alunos
+    print cadeiras
+    print inscricoes
+    print alunos
+    let listaResultado = verialuc inscricoes alunos
+    print listaResultado
+    return ()
+
+
+
 
 
 
