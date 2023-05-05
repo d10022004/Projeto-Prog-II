@@ -75,22 +75,6 @@ apreins = do
     return inscricao
 
 ------------------------------------------------------------------------------
-verialuc :: [(String, Int)] -> [(String, Int, String)] -> [(Int, String, String)]
-verialuc [] _ = []
-verialuc ((nome, numero):xs) ys = 
-    let matches = [(i, n, s) | (n, i, s) <- ys, i == numero]
-        restante = verialuc xs ys
-    in [(i, nome, s) | (i, _, s) <- matches] ++ restante
-
-combinalista :: [(String, Int)] -> [(String, Int)] -> [(String, Int, String)] -> [(Int, String, String)]
-combinalista lst1 lst2 lst3 = 
-    let matches = [(nome, numero) | (nome, numero) <- lst2, elem nome (map fst lst1)]
-    in verialuc matches lst3
-
-
-
-
-
 recetfic :: IO ()
 recetfic = do
     cadeiras <- apreuc
@@ -99,8 +83,6 @@ recetfic = do
     print cadeiras
     print inscricoes
     print alunos
-    let listaResultado = verialuc inscricoes alunos
-    print listaResultado
     return ()
 
 
