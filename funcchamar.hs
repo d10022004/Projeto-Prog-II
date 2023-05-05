@@ -1,7 +1,7 @@
 module Funcchamar where
 import System.IO 
 
-
+import Exem (apreuc, apreal, main)
 chamaselecop ::  Int -> IO()
 chamaselecop x 
     |x==1 = do
