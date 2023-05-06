@@ -141,9 +141,18 @@ visualizaraluno disciplinas alunos inscricoes codigoaluno = do
 
 getDisciplinasDoAluno :: [(Int, Int, String)] -> [(String, Int)] -> [(String, Int, String)] -> String -> [String]
 getDisciplinasDoAluno disciplinas alunos inscricoes codigoAluno = [disciplina | (aluno, codigo) <- alunos, (codigo', _, disciplina) <- disciplinas, codigo == codigo', aluno == codigoAluno]
-
-
-
+------------------------------------------------------------------------------------------
+verficheiros :: IO()
+verficheiros = do
+    uc <- impruc 
+    ins <- imprlisal
+    al <- impins 
+    print uc 
+    putStrLn "***********************************************************"
+    print ins 
+    putStrLn "***********************************************************"
+    print al
+    return ()
 ----------------------------------------------------------------------------------------------
 chamaselecop ::  Int -> [(Int, Int, String)] -> [(String, Int)] -> [(String, Int, String)]-> IO()
 chamaselecop x cadeiras alunos inscricoes
@@ -158,7 +167,6 @@ chamaselecop x cadeiras alunos inscricoes
         putStrLn "Qual o numero do aluno?(alxxx)"
         al <- getLine
         visualizaraluno cadeiras alunos inscricoes al
-        pause
         main
     |x==0 = do
         main
@@ -178,16 +186,18 @@ execop :: Int -> [(Int, Int, String)] -> [(String, Int)] -> [(String, Int, Strin
 execop x uc ins al
     |x==1 = do
         encdisc uc ins al
-        pause
         main
     |x==2 = do
         encal uc ins al
-        pause 
         main
     |x==3 = do
         putStrLn "Qual quer visualizar?\n1->Ver UC\n2->VER Aluno"
         op <- opcoes
         chamaselecop op uc ins al
+    |x==4 = do
+        verficheiros
+        pause 
+        main
     |x==0 = do
         return ()
 
