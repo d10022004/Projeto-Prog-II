@@ -121,29 +121,30 @@ encal disciplinas alunos inscricoes = do
 ----------------------------------------------------------------
 visualizarcadeira :: [(Int, Int, String)] -> [(String, Int)] -> [(String, Int, String)] -> String -> IO ()
 visualizarcadeira disciplinas alunos inscricoes nome = do
-    let alunosnacadeira = getalunosnacadeira alunos inscricoes nome
+    let alunosnacadeira = getalunosnacadeira disciplinas alunos inscricoes nome
     putStrLn (nome ++ ":")
     if null alunosnacadeira
         then putStrLn "CADEIRA NAO ENCONTRADA"
         else mapM_ putStrLn alunosnacadeira
-    
 
-getalunosnacadeira :: [(String, Int)] -> [(String, Int, String)] -> String -> [String]
-getalunosnacadeira alunos inscricoes nomeCadeira = [aluno | (aluno, codigo) <- alunos, (codigo', _, disciplina) <- disciplinas, codigo == codigo', disciplina == nomeCadeira]
+getalunosnacadeira :: [(Int, Int, String)] -> [(String, Int)] -> [(String, Int, String)] -> String -> [String]
+getalunosnacadeira disciplinas alunos inscricoes nomeCadeira = [aluno | (aluno, codigo) <- alunos, (codigo', _, disciplina) <- disciplinas, codigo == codigo', disciplina == nomeCadeira]
+
 ------------------------------------------------------
 visualizaraluno :: [(Int, Int, String)] -> [(String, Int)] -> [(String, Int, String)] -> String -> IO ()
 visualizaraluno disciplinas alunos inscricoes codigoaluno = do
-    let disciplinasDoAluno = getDisciplinasDoAluno alunos inscricoes codigoaluno
+    let disciplinasDoAluno = getDisciplinasDoAluno disciplinas alunos inscricoes codigoaluno
     putStrLn ("Disciplinas do aluno " ++ codigoaluno ++ ":")
     if null disciplinasDoAluno
         then putStrLn "NAO ENCONTRADO"
         else mapM_ putStrLn disciplinasDoAluno
 
-getDisciplinasDoAluno :: [(String, Int)] -> [(String, Int, String)] -> String -> [String]
-getDisciplinasDoAluno alunos inscricoes codigoAluno = [disciplina | (_, codigo) <- alunos, (codigo', _, disciplina) <- disciplinas, codigo == codigo', codigo' == codigoAluno]
+getDisciplinasDoAluno :: [(Int, Int, String)] -> [(String, Int)] -> [(String, Int, String)] -> String -> [String]
+getDisciplinasDoAluno disciplinas alunos inscricoes codigoAluno = [disciplina | (aluno, codigo) <- alunos, (codigo', _, disciplina) <- disciplinas, codigo == codigo', aluno == codigoAluno]
 
 
-----------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------
 chamaselecop ::  Int -> [(Int, Int, String)] -> [(String, Int)] -> [(String, Int, String)]-> IO()
 chamaselecop x cadeiras alunos inscricoes
     |x==1 = do
@@ -156,6 +157,7 @@ chamaselecop x cadeiras alunos inscricoes
     |x==2 = do
         putStrLn "Qual o numero do aluno?(alxxx)"
         al <- getLine
+        visualizaraluno cadeiras alunos inscricoes al
         pause
         main
     |x==0 = do
@@ -206,15 +208,20 @@ receitfic = do
 
 
 
-main :: IO()
-main = do
+menu :: IO()
+menu = do
     putStrLn ("******************MENU**********************")
     putStrLn ("\n1->Ver UC \n2->Ver Alunos \n3->Filtrar por UC/Alunos\n0->Sair \n    Qual a opção?:")
     receitfic
     return ()
 
 
-
+main :: IO()
+main = do
+    apresentatrab 
+    pause 
+    menu
+    return ()
 
 
 
