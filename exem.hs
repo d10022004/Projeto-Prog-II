@@ -1,9 +1,22 @@
 module Exem where
-import System.IO
+import System.IO 
 import Data.Char (isSpace)
 import Text.Read (readMaybe)
 import Data.Maybe (mapMaybe)
+import Data.List (nub)
 
+-- PAUSA NA FUNÇÃO ------------------------------------------
+pause :: IO()
+pause = do
+    putStrLn "Pressione Enter para continuar..."
+    hFlush stdout
+    getLine
+    return ()
+
+-- Pag de apresentação -------------------------------------
+apresentatrab :: IO ()
+apresentatrab = do
+    putStrLn "" -- Meter disciplina, ano letivo, nome do projeto e nomes dos alunos
 
 -- Função que recebe uma lista de strings representando as linhas do arquivo e retorna uma lista de tuplas com os números e nome das disciplinas
 toDisciplinas :: [String] -> [(Int, Int, String)]
@@ -75,15 +88,87 @@ apreins = do
     return inscricao
 
 ------------------------------------------------------------------------------
-recetfic :: IO ()
-recetfic = do
+
+-- Função que apresenta todas as cadeiras e os respetivos alunos que estão inscritos
+encdisc :: [(Int, Int, String)] -> [(String, Int)] -> [(String, Int, String)] -> IO ()
+encdisc disciplinas alunos inscricoes = do
+    let resultado = encdisci alunos inscricoes <$> disciplinas
+    mapM_ putStrLn resultado
+  where
+    encdisci :: [(String, Int)] -> [(String, Int, String)] -> (Int, Int, String) -> String
+    encdisci alunos inscricoes (cod, _, disc) = disc ++ ":\n" ++ alunosnadisciplina
+      where
+        alunosnadisciplina = unlines $ map (getAlunoNome inscricoes) alunosinscritos
+        alunosinscritos = map fst $ filter (\(_, c) -> c == cod) alunos
+        getAlunoNome :: [(String, Int, String)] -> String -> String
+        getAlunoNome inscricoes aluno = head [nome | (a, _, nome) <- inscricoes, a == aluno]
+
+
+-- Função que apresenta todos os alunos e as respetivas cadeiras que estão inscritos
+encal :: [(Int, Int, String)] -> [(String, Int)] -> [(String, Int, String)] -> IO ()
+encal disciplinas alunos inscricoes = do
+    let resultado = mapaluno disciplinas inscricoes <$> nub (map fst alunos)
+    mapM_ putStrLn resultado
+  where
+    mapaluno :: [(Int, Int, String)] -> [(String, Int, String)] -> String -> String
+    mapaluno disciplinas inscricoes aluno = aluno ++ ":\n" ++ discal
+      where
+        discal = unlines $ map (getDisciplinaNome disciplinas) disciplinasins        
+        disciplinasins = map snd $ filter (\(a, _) -> a == aluno) alunos
+        getDisciplinaNome :: [(Int, Int, String)] -> Int -> String
+        getDisciplinaNome disciplinas codigo = head [disc | (c, _, disc) <- disciplinas, c == codigo]
+
+----------------------------------------------------------------
+visualizarcadeira :: [(Int, Int, String)] -> [(String, Int)] -> [(String, Int, String)] -> String -> IO ()
+visualizarcadeira disciplinas alunos inscricoes nome = do
+    let alunosNaCadeira = getalunosnacadeira alunos inscricoes nome
+    putStrLn (nome ++ ":")
+    mapM_ putStrLn alunosNaCadeira
+
+getalunosnacadeira :: [(String, Int)] -> [(String, Int, String)] -> String -> [String]
+getalunosnacadeira alunos inscricoes nomeCadeira = [aluno | (aluno, codigo) <- alunos, (codigo', _, disciplina) <- disciplinas, codigo == codigo', disciplina == nomeCadeira]
+
+----------------------------------------------------------------
+chamaselecop ::  Int -> [(Int, Int, String)] -> [(String, Int)] -> [(String, Int, String)]-> IO()
+chamaselecop x cadeiras alunos inscricoes
+    |x==1 = do
+        putStrLn "Qual o nome da cadeira?"
+        uc <- getLine
+        visualizarcadeira cadeiras alunos inscricoes uc
+        
+        pause
+    |x==2 = do
+        putStrLn "Qual o numero do aluno?(alxxx)"
+        al <- getLine
+        pause
+    |x==0 = do
+        pause
+    |otherwise = do 
+        putStrLn "OPCAO INVALIDA"
+        pause
+
+----Função que recebe as funções dos ficheiros em forma de lista e dirige para as opções
+
+receitfic :: IO ()
+receitfic = do
     cadeiras <- apreuc
     inscricoes <- apreins
     alunos <- apreal
-    print cadeiras
-    print inscricoes
-    print alunos
+    opcoes
+    encdisc cadeiras inscricoes alunos 
+    encal cadeiras inscricoes alunos
     return ()
+
+
+menu :: IO()
+menu = do
+    putStrLn ("******************MENU**********************")
+    putStrLn ("\n1->Ver UC \n2->Ver Alunos \n3->Filtrar por UC/Alunos\n0->Sair \n    Qual a opção?:")
+
+
+
+
+
 
 
 
