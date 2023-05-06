@@ -33,7 +33,7 @@ impruc :: IO String
 impruc = readFile "ucs.txt"
 
 -- Função secundária que lê ficheiro das ucs e apresenta as em lista
-apreuc :: IO ([(Int, Int, String)])
+apreuc :: IO [(Int, Int, String)]
 apreuc = do
     texto <- impruc
     let list = lines texto
@@ -58,7 +58,7 @@ imprlisal :: IO String
 imprlisal = readFile "listaalunos.txt"
 
 -- Função secundária que lê ficheiro da lista de alunos e apresenta as em lista
-apreal :: IO ([(String, Int, String)])
+apreal :: IO [(String, Int, String)]
 apreal = do
     texto <- imprlisal
     let list = lines texto 
@@ -80,7 +80,7 @@ impins :: IO String
 impins = readFile "inscrições.txt"
 
 -- Função secundária das inscrições
-apreins :: IO([(String, Int)])
+apreins :: IO [(String, Int)]
 apreins = do
     texto <- impins 
     let list = lines texto
@@ -121,12 +121,27 @@ encal disciplinas alunos inscricoes = do
 ----------------------------------------------------------------
 visualizarcadeira :: [(Int, Int, String)] -> [(String, Int)] -> [(String, Int, String)] -> String -> IO ()
 visualizarcadeira disciplinas alunos inscricoes nome = do
-    let alunosNaCadeira = getalunosnacadeira alunos inscricoes nome
+    let alunosnacadeira = getalunosnacadeira alunos inscricoes nome
     putStrLn (nome ++ ":")
-    mapM_ putStrLn alunosNaCadeira
+    if null alunosnacadeira
+        then putStrLn "CADEIRA NAO ENCONTRADA"
+        else mapM_ putStrLn alunosnacadeira
+    
 
 getalunosnacadeira :: [(String, Int)] -> [(String, Int, String)] -> String -> [String]
 getalunosnacadeira alunos inscricoes nomeCadeira = [aluno | (aluno, codigo) <- alunos, (codigo', _, disciplina) <- disciplinas, codigo == codigo', disciplina == nomeCadeira]
+------------------------------------------------------
+visualizaraluno :: [(Int, Int, String)] -> [(String, Int)] -> [(String, Int, String)] -> String -> IO ()
+visualizaraluno disciplinas alunos inscricoes codigoaluno = do
+    let disciplinasDoAluno = getDisciplinasDoAluno alunos inscricoes codigoaluno
+    putStrLn ("Disciplinas do aluno " ++ codigoaluno ++ ":")
+    if null disciplinasDoAluno
+        then putStrLn "NAO ENCONTRADO"
+        else mapM_ putStrLn disciplinasDoAluno
+
+getDisciplinasDoAluno :: [(String, Int)] -> [(String, Int, String)] -> String -> [String]
+getDisciplinasDoAluno alunos inscricoes codigoAluno = [disciplina | (_, codigo) <- alunos, (codigo', _, disciplina) <- disciplinas, codigo == codigo', codigo' == codigoAluno]
+
 
 ----------------------------------------------------------------
 chamaselecop ::  Int -> [(Int, Int, String)] -> [(String, Int)] -> [(String, Int, String)]-> IO()
@@ -135,17 +150,48 @@ chamaselecop x cadeiras alunos inscricoes
         putStrLn "Qual o nome da cadeira?"
         uc <- getLine
         visualizarcadeira cadeiras alunos inscricoes uc
-        
         pause
+        main 
+        
     |x==2 = do
         putStrLn "Qual o numero do aluno?(alxxx)"
         al <- getLine
         pause
+        main
     |x==0 = do
-        pause
+        main
     |otherwise = do 
         putStrLn "OPCAO INVALIDA"
         pause
+        main
+       
+
+opcoes :: IO Int
+opcoes = do
+    op <- getLine
+    let ope = read op :: Int
+    return ope
+
+execop :: Int -> [(Int, Int, String)] -> [(String, Int)] -> [(String, Int, String)] -> IO()
+execop x uc ins al
+    |x==1 = do
+        encdisc uc ins al
+        pause
+        main
+    |x==2 = do
+        encal uc ins al
+        pause 
+        main
+    |x==3 = do
+        putStrLn "Qual quer visualizar?\n1->Ver UC\n2->VER Aluno"
+        op <- opcoes
+        chamaselecop op uc ins al
+    |x==0 = do
+        return ()
+
+
+
+
 
 ----Função que recebe as funções dos ficheiros em forma de lista e dirige para as opções
 
@@ -154,17 +200,18 @@ receitfic = do
     cadeiras <- apreuc
     inscricoes <- apreins
     alunos <- apreal
-    opcoes
-    encdisc cadeiras inscricoes alunos 
-    encal cadeiras inscricoes alunos
+    op<- opcoes
+    execop op cadeiras inscricoes alunos
     return ()
 
 
-menu :: IO()
-menu = do
+
+main :: IO()
+main = do
     putStrLn ("******************MENU**********************")
     putStrLn ("\n1->Ver UC \n2->Ver Alunos \n3->Filtrar por UC/Alunos\n0->Sair \n    Qual a opção?:")
-
+    receitfic
+    return ()
 
 
 
