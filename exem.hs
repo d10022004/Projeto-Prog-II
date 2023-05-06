@@ -196,7 +196,6 @@ execop x uc ins al
         chamaselecop op uc ins al
     |x==4 = do
         verficheiros
-        pause 
         main
     |x==0 = do
         return ()
@@ -221,7 +220,7 @@ receitfic = do
 menu :: IO()
 menu = do
     putStrLn ("******************MENU**********************")
-    putStrLn ("\n1->Ver UC \n2->Ver Alunos \n3->Filtrar por UC/Alunos\n0->Sair \n    Qual a opção?:")
+    putStrLn ("\n1->Ver UC \n2->Ver Alunos \n3->Filtrar por UC/Alunos\n4->Ver Ficheiros\n0->Sair \n    Qual a opção?:")
     receitfic
     return ()
 
