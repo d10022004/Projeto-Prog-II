@@ -16,7 +16,16 @@ pause = do
 -- Pag de apresentação -------------------------------------
 apresentatrab :: IO ()
 apresentatrab = do
-    putStrLn "" -- Meter disciplina, ano letivo, nome do projeto e nomes dos alunos
+    putStrLn "Programac0o Funcional" -- Meter disciplina, ano letivo, nome do projeto e nomes dos alunos
+    putStrLn "      2022/2023   "
+    putStrLn "  "
+    putStrLn "Planificacao para a gestao de salas e exmes em Haskell"
+    putStrLn "  "
+    putStrLn "Realizado por:"
+    putStrLn "   *Carolina Machado al79359"
+    putStrLn "   *David Fidalgo al79881"
+    putStrLn "   *Joao Fraga al78400"
+    return ()
 
 -- Função que recebe uma lista de strings representando as linhas do arquivo e retorna uma lista de tuplas com os números e nome das disciplinas
 toDisciplinas :: [String] -> [(Int, Int, String)]
@@ -103,7 +112,6 @@ encdisc disciplinas alunos inscricoes = do
         getAlunoNome :: [(String, Int, String)] -> String -> String
         getAlunoNome inscricoes aluno = head [nome | (a, _, nome) <- inscricoes, a == aluno]
 
-
 -- Função que apresenta todos os alunos e as respetivas cadeiras que estão inscritos
 encal :: [(Int, Int, String)] -> [(String, Int)] -> [(String, Int, String)] -> IO ()
 encal disciplinas alunos inscricoes = do
@@ -161,19 +169,19 @@ chamaselecop x cadeiras alunos inscricoes
         uc <- getLine
         visualizarcadeira cadeiras alunos inscricoes uc
         pause
-        main 
+        main2 
         
     |x==2 = do
         putStrLn "Qual o numero do aluno?(alxxx)"
         al <- getLine
         visualizaraluno cadeiras alunos inscricoes al
-        main
+        main2
     |x==0 = do
-        main
+        main2
     |otherwise = do 
         putStrLn "OPCAO INVALIDA"
         pause
-        main
+        main2
        
 
 opcoes :: IO Int
@@ -186,23 +194,19 @@ execop :: Int -> [(Int, Int, String)] -> [(String, Int)] -> [(String, Int, Strin
 execop x uc ins al
     |x==1 = do
         encdisc uc ins al
-        main
+        main2
     |x==2 = do
         encal uc ins al
-        main
+        main2
     |x==3 = do
         putStrLn "Qual quer visualizar?\n1->Ver UC\n2->VER Aluno"
         op <- opcoes
         chamaselecop op uc ins al
     |x==4 = do
         verficheiros
-        main
+        main2
     |x==0 = do
         return ()
-
-
-
-
 
 ----Função que recebe as funções dos ficheiros em forma de lista e dirige para as opções
 
@@ -224,12 +228,16 @@ menu = do
     receitfic
     return ()
 
+main2 :: IO ()
+main2 = do
+    pause 
+    menu
+    return ()
 
 main :: IO()
 main = do
     apresentatrab 
-    pause 
-    menu
+    main2
     return ()
 
 
